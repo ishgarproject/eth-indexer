@@ -1,0 +1,33 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum ContractType {
+  ERC721
+  ERC1155
+}
+
+model Transaction {
+  id          Int       @id @default(autoincrement())
+  blockNumber Int
+  hash        String
+  Contract    Contract? @relation(fields: [contractId], references: [id])
+  contractId  Int?
+}
+
+model Contract {
+  id           Int           @id @default(autoincrement())
+  address      String
+  contractType ContractType
+  blockNumber  Int
+  transactions Transaction[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([id])
+}

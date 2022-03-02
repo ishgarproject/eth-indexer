@@ -1,0 +1,10 @@
+node_modules
+build
+out
+
+# environment variables
+.env
+.env.local
+
+# typechain
+src/abis/types
