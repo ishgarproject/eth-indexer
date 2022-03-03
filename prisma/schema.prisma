@@ -12,22 +12,39 @@ enum ContractType {
   ERC1155
 }
 
-model Transaction {
-  id          Int       @id @default(autoincrement())
-  blockNumber Int
-  hash        String
-  Contract    Contract? @relation(fields: [contractId], references: [id])
-  contractId  Int?
-}
-
 model Contract {
-  id           Int           @id @default(autoincrement())
+  id           Int          @id @default(autoincrement())
   address      String
+  deployer     String
+  name         String
+  symbol       String
+  accounts     Account[]
+  blockNumber  BigInt
   contractType ContractType
-  blockNumber  Int
-  transactions Transaction[]
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
 
   @@index([id])
+}
+
+model Account {
+  id      Int     @id @default(autoincrement())
+  address String
+  tokens  Token[]
+
+  Contract   Contract? @relation(fields: [contractId], references: [id])
+  contractId Int?
+
+  @@index([id])
+}
+
+model Token {
+  id              Int    @id @default(autoincrement())
+  tokenId         Int
+  owner           String
+  contractAddress String
+
+  @@index([id])
+  Account   Account? @relation(fields: [accountId], references: [id])
+  accountId Int?
 }

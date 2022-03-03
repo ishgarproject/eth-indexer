@@ -9,6 +9,7 @@
     "prisma:pull": "prisma db pull",
     "prisma:format": "prisma format",
     "typechain": "typechain './src/abis/*.json' --out-dir ./src/abis/types --target ethers-v5",
+    "postinstall": "yarn typechain",
     "prepare": "husky install"
   },
   "dependencies": {
