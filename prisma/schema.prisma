@@ -43,8 +43,10 @@ model Token {
   tokenId         Int
   owner           String
   contractAddress String
+  approvedAddress String
 
-  @@index([id])
   Account   Account? @relation(fields: [accountId], references: [id])
   accountId Int?
+
+  @@index([id])
 }

@@ -1,7 +1,4 @@
-import { ethers } from 'ethers';
 import type { AlchemyProvider } from '@ethersproject/providers';
-import type { BlockWithTransactions } from '@ethersproject/abstract-provider';
-import type { TxResponse } from '~/types';
 import { Contract, ContractInterface } from '@ethersproject/contracts';
 import { AddressZero } from '@ethersproject/constants';
 import { getAddress } from '@ethersproject/address';
@@ -44,32 +41,4 @@ export async function isERC721(address: string, provider: AlchemyProvider) {
 export async function isERC1155(address: string, provider: AlchemyProvider) {
   const contract = getERC721(address, provider);
   return contract.supportsInterface('0xd9b67a26');
-}
-
-export async function getLogsFromTransaction(transactionHash: string, provider: AlchemyProvider) {
-  const iface = new ethers.utils.Interface(ERC721Abi);
-  const receipt = await provider.getTransactionReceipt(transactionHash);
-  // try to parse using ERC721 abi
-  const logs = receipt.logs.map((log) => {
-    try {
-      return iface.parseLog(log);
-    } catch {
-      return null;
-    }
-  });
-  // remove 'null' elements
-  return logs.filter((log) => log);
-}
-
-export function getContractDeploymentsInBlock(block: BlockWithTransactions) {
-  return block.transactions.filter((tx: TxResponse) => Boolean(tx.creates));
-}
-
-// get logs of non-contract deployments transactions
-export async function getBlockLogs(block: BlockWithTransactions, provider: AlchemyProvider) {
-  // non-contract deployments
-  const transactions: TxResponse[] = block.transactions.filter((tx: TxResponse) => !Boolean(tx.creates));
-  const logsPerTransaction = await Promise.all(transactions.map(({ hash }) => getLogsFromTransaction(hash, provider)));
-  // remove empty elements
-  return logsPerTransaction.filter((transactionLogs) => transactionLogs.length);
 }
