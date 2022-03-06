@@ -1,13 +1,23 @@
-import type { LogDescription } from '@ethersproject/abi';
-import type { BigNumber } from '@ethersproject/bignumber';
 import type { TransactionResponse } from '@ethersproject/abstract-provider';
-import type { ERC721EventNames } from '~/modules/contracts/helpers';
+import type { LogDescription } from '@ethersproject/abi';
 
-export type Overwrite<T, U> = Pick<T, Exclude<keyof T, keyof U>> & U;
+export type AlchemyNetwork = 'mainnet' | 'goerli';
+
 export type TxResponse = TransactionResponse & { creates?: string };
-export type ERC721EventTransferArgs = {
-  from: string;
-  to: string;
-  tokenId: BigNumber;
-};
-export type LogInfo = Overwrite<LogDescription, { name: ERC721EventNames; args: ERC721EventTransferArgs }>;
+export type ERC721EventLog = LogDescription & { contractAddress: string };
+
+export interface Nft {
+  tokenId: number;
+  tokenIdWithLeadingZeros: string;
+  tokenUri?: string;
+}
+
+export interface ERC721 {
+  address: string;
+  name?: string;
+  nfts: Nft[];
+}
+
+export interface OwnedERC721s {
+  [key: string]: ERC721;
+}

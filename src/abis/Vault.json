@@ -1,0 +1,290 @@
+[
+  {
+    "type": "constructor",
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "starknetCoreAddress_",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "ishgarL2Address_",
+        "type": "uint256"
+      }
+    ]
+  },
+  {
+    "type": "function",
+    "name": "DEPOSIT_ETHER_SELECTOR",
+    "inputs": [],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "DEPOSIT_NFT_SELECTOR",
+    "inputs": [],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "_exists",
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "erc721Address",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "balances",
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "depositEther",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "payable"
+  },
+  {
+    "type": "function",
+    "name": "depositNFT",
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "erc721Address",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "deposits",
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "depositor",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "erc721",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "ishgarL2Address",
+    "inputs": [],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "owner",
+    "inputs": [],
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "renounceOwnership",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "starknetCoreAddress",
+    "inputs": [],
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "transferOwnership",
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "updateIshgarL2Address",
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "newAddress",
+        "type": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "event",
+    "name": "DepositEther",
+    "inputs": [
+      {
+        "name": "depositor",
+        "type": "address",
+        "indexed": true
+      },
+      {
+        "name": "amount",
+        "type": "uint256",
+        "indexed": true
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "DepositNFT",
+    "inputs": [
+      {
+        "name": "depositor",
+        "type": "address",
+        "indexed": true
+      },
+      {
+        "name": "erc721",
+        "type": "address",
+        "indexed": true
+      },
+      {
+        "name": "tokenId",
+        "type": "uint256",
+        "indexed": true
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "OwnershipTransferred",
+    "inputs": [
+      {
+        "name": "previousOwner",
+        "type": "address",
+        "indexed": true
+      },
+      {
+        "name": "newOwner",
+        "type": "address",
+        "indexed": true
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "UpdateIshgarL2Address",
+    "inputs": [
+      {
+        "name": "previousAddress",
+        "type": "uint256",
+        "indexed": true
+      },
+      {
+        "name": "newAddress",
+        "type": "uint256",
+        "indexed": true
+      }
+    ],
+    "anonymous": false
+  }
+]

@@ -1,11 +1,13 @@
-import type { AlchemyProvider } from '@ethersproject/providers';
+import { AlchemyProvider } from '@ethersproject/providers';
 import { Contract, ContractInterface } from '@ethersproject/contracts';
 import { AddressZero } from '@ethersproject/constants';
 import { getAddress } from '@ethersproject/address';
-import { ERC721 } from '~/abis/types/ERC721';
+import { VAULT_ADDRESS } from '~/constants';
+import VaultAbi from '~/abis/Vault.json';
 import ERC721Abi from '~/abis/ERC721.json';
+import { Vault, ERC721 } from '~/abis/types';
 
-function isAddress(address: string) {
+export function isAddress(address: string) {
   try {
     return getAddress(address);
   } catch (err) {
@@ -13,7 +15,7 @@ function isAddress(address: string) {
   }
 }
 
-function getContract<T extends Contract = Contract>(
+export function getContract<T extends Contract = Contract>(
   address: string,
   ABI: ContractInterface,
   provider: AlchemyProvider
@@ -24,21 +26,24 @@ function getContract<T extends Contract = Contract>(
   return new Contract(address, ABI, provider) as T;
 }
 
+export function getVault(provider: AlchemyProvider) {
+  return getContract<Vault>(VAULT_ADDRESS, VaultAbi, provider);
+}
+
 export function getERC721(address: string, provider: AlchemyProvider) {
   return getContract<ERC721>(address, ERC721Abi, provider);
+}
+
+export async function isERC721(address: string, provider: AlchemyProvider) {
+  try {
+    const contract = getERC721(address, provider);
+    return await contract.supportsInterface('0x80ac58cd');
+  } catch {
+    return false;
+  }
 }
 
 export async function getERC721NameAndSymbol(contract: ERC721) {
   const [name, symbol] = await Promise.all([contract.name(), contract.symbol()]);
   return { name, symbol };
-}
-
-export async function isERC721(address: string, provider: AlchemyProvider) {
-  const contract = getERC721(address, provider);
-  return contract.supportsInterface('0x80ac58cd');
-}
-
-export async function isERC1155(address: string, provider: AlchemyProvider) {
-  const contract = getERC721(address, provider);
-  return contract.supportsInterface('0xd9b67a26');
 }
