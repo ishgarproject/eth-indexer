@@ -6,5 +6,8 @@ out
 .env
 .env.local
 
+# errors
+yarn-error.log
+
 # typechain
 src/abis/types
