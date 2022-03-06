@@ -38,6 +38,9 @@ async function getERC721TransactionLogs(
   provider: AlchemyProvider
 ): Promise<ERC721EventLog[]> {
   const receipt = await provider.getTransactionReceipt(transactionHash);
+  if (!receipt || !receipt.logs) {
+    return [];
+  }
   const iface = new ethers.utils.Interface(ERC721Abi);
   const logs = receipt.logs.map((rawLog) => {
     try {
