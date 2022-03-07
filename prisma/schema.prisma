@@ -28,7 +28,8 @@ model Token {
   id              Int       @id @default(autoincrement())
   tokenId         Int
   owner           String
-  tokenUri        String
+  tokenUri        String?
+  imageUri        String?
   contract        String
   approvedAddress String?
   Contract        Contract? @relation(fields: [contractId], references: [id])

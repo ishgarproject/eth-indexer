@@ -6,6 +6,11 @@ export type AlchemyNetwork = 'mainnet' | 'goerli';
 export type TxResponse = TransactionResponse & { creates?: string };
 export type ERC721EventLog = LogDescription & { contractAddress: string };
 
+export interface ERC721Metadata {
+  image?: string;
+  attributes?: any[];
+}
+
 export interface Nft {
   tokenId: number;
   tokenIdWithLeadingZeros: string;
