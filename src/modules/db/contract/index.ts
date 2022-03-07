@@ -10,21 +10,19 @@ export async function registerERC721s(contracts: TxResponse[], provider: Alchemy
   console.log(`Checking ${contracts.length} contract deployments...`);
   return Promise.all(
     contracts.map(async (contract) => {
-      const contractAddress = contract.creates;
-      console.log(`Contract ${contractAddress}`);
-      if (await isERC721(contractAddress, provider)) {
-        const erc721 = getERC721(contractAddress, provider);
+      const address = contract.creates;
+      console.log(`Contract ${address}`);
+      if (await isERC721(address, provider)) {
+        const erc721 = getERC721(address, provider);
         const { name, symbol } = await getERC721NameAndSymbol(erc721);
-        console.log(`registering new ERC721 ${contractAddress} with name: ${name} and symbol ${symbol}`);
+        console.log(`registering new ERC721 ${address} with name: ${name} and symbol ${symbol}`);
 
         return await prisma.contract.create({
           data: {
-            address: contractAddress,
-            deployer: contract.from,
+            address,
             name,
             symbol,
             contractType: ContractType.ERC721,
-            blockNumber: contract.blockNumber,
           },
         });
       }

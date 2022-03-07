@@ -6,10 +6,6 @@ export async function retrieveERC721(address: string, prisma: PrismaClient) {
   return prisma.contract.findFirst({ where: { address } });
 }
 
-export async function retrieveAccount(address: string, prisma: PrismaClient) {
-  return prisma.account.findFirst({ where: { address } });
-}
-
 export function getERC721TransferArgs(log: ERC721EventLog) {
   const [from, to, tokenId] = log.args;
   return {

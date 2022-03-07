@@ -11,63 +11,35 @@ export async function performERC721Transfer(log: ERC721EventLog, prisma: PrismaC
     return;
   }
 
-  await updateReceiverAccount(log, prisma);
-  await updateSenderAccount(log, contractAddress, prisma);
+  await updateToken(log, prisma);
 }
 
-/**
- * @param {ERC721EventLog} log
- * @param {string} contractAddress
- * @param {PrismaClient} prisma
- * Doesn't update anything if sender address is AddressZero
- * Otherwise remove the Token from sender Account
- */
-async function updateSenderAccount(log: ERC721EventLog, contractAddress: string, prisma: PrismaClient) {
-  const { from, tokenId } = getERC721TransferArgs(log);
-  if (from === AddressZero) {
-    return;
-  }
+async function updateToken(log: ERC721EventLog, prisma: PrismaClient) {
+  const { contractAddress } = log;
+  const { to, tokenId } = getERC721TransferArgs(log);
+
   const token = await prisma.token.findFirst({
     where: {
       tokenId,
-      owner: from,
-      contractAddress,
+      owner: to,
+      contract: contractAddress,
     },
-    select: { id: true },
   });
-  await prisma.account.update({
-    where: { address: from },
+
+  return await prisma.contract.update({
+    where: { address: contractAddress },
     data: {
       tokens: {
-        delete: [{ id: token.id }],
-      },
-    },
-  });
-}
-
-async function updateReceiverAccount(log: ERC721EventLog, prisma: PrismaClient) {
-  const { contractAddress } = log;
-  const { to, tokenId } = getERC721TransferArgs(log);
-  const contract = await prisma.contract.findFirst({ where: { address: contractAddress } });
-  return prisma.account.upsert({
-    where: { address: to },
-    create: {
-      address: to,
-      contractId: contract.id,
-      tokens: {
-        create: {
-          owner: to,
-          contractAddress,
-          tokenId,
-        },
-      },
-    },
-    update: {
-      tokens: {
-        create: {
-          owner: to,
-          contractAddress,
-          tokenId,
+        upsert: {
+          where: { id: token?.id || 0 },
+          create: {
+            tokenId,
+            owner: to,
+            contract: contractAddress,
+          },
+          update: {
+            owner: to,
+          },
         },
       },
     },

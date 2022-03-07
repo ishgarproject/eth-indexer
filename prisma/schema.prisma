@@ -17,39 +17,21 @@ enum ContractType {
 
 model Contract {
   id           Int          @id @default(autoincrement())
-  address      String
-  deployer     String
+  address      String       @unique
   name         String
   symbol       String
-  accounts     Account[]
-  blockNumber  BigInt
+  tokens       Token[]
   contractType ContractType
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
-
-  @@index([id])
-}
-
-model Account {
-  id      Int     @id @default(autoincrement())
-  address String  @unique
-  tokens  Token[]
-
-  Contract   Contract? @relation(fields: [contractId], references: [id])
-  contractId Int?
-
-  @@index([id])
 }
 
 model Token {
-  id              Int     @id @default(autoincrement())
+  id              Int       @id @default(autoincrement())
   tokenId         Int
   owner           String
-  contractAddress String
+  contract        String
   approvedAddress String?
-
-  Account   Account? @relation(fields: [accountId], references: [id])
-  accountId Int?
+  Contract        Contract? @relation(fields: [contractId], references: [id])
+  contractId      Int?
 
   @@index([id])
 }
