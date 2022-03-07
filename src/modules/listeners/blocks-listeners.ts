@@ -11,7 +11,7 @@ export async function blockListener(provider: AlchemyProvider, prisma: PrismaCli
     console.log(`Scanning block ${blockNumber}`);
     const { contracts, erc721Logs } = await getBlockData(blockNumber, provider);
     await registerERC721s(contracts, provider, prisma);
-    await performERC721Logs(erc721Logs, prisma);
+    await performERC721Logs(erc721Logs, provider, prisma);
     console.log('------------------------');
   });
 }

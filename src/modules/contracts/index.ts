@@ -47,3 +47,7 @@ export async function getERC721NameAndSymbol(contract: ERC721) {
   const [name, symbol] = await Promise.all([contract.name(), contract.symbol()]);
   return { name, symbol };
 }
+
+export async function getERC721TokenUri(contract: ERC721, tokenId: number) {
+  return await contract.tokenURI(tokenId);
+}

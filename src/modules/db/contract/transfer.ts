@@ -1,9 +1,10 @@
-import { AddressZero } from '@ethersproject/constants';
 import type { PrismaClient } from '@prisma/client';
+import type { AlchemyProvider } from '@ethersproject/providers';
 import type { ERC721EventLog } from '~/types';
 import { retrieveERC721, getERC721TransferArgs } from './helpers';
+import { getERC721, getERC721TokenUri } from '~/modules/contracts';
 
-export async function performERC721Transfer(log: ERC721EventLog, prisma: PrismaClient) {
+export async function performERC721Transfer(log: ERC721EventLog, provider: AlchemyProvider, prisma: PrismaClient) {
   const { contractAddress } = log;
   const contract = await retrieveERC721(contractAddress, prisma);
   if (contract === null) {
@@ -11,10 +12,10 @@ export async function performERC721Transfer(log: ERC721EventLog, prisma: PrismaC
     return;
   }
 
-  await updateToken(log, prisma);
+  await updateToken(log, provider, prisma);
 }
 
-async function updateToken(log: ERC721EventLog, prisma: PrismaClient) {
+async function updateToken(log: ERC721EventLog, provider: AlchemyProvider, prisma: PrismaClient) {
   const { contractAddress } = log;
   const { to, tokenId } = getERC721TransferArgs(log);
 
@@ -26,6 +27,9 @@ async function updateToken(log: ERC721EventLog, prisma: PrismaClient) {
     },
   });
 
+  const erc721 = getERC721(contractAddress, provider);
+  const tokenUri = await getERC721TokenUri(erc721, tokenId);
+
   return await prisma.contract.update({
     where: { address: contractAddress },
     data: {
@@ -34,6 +38,7 @@ async function updateToken(log: ERC721EventLog, prisma: PrismaClient) {
           where: { id: token?.id || 0 },
           create: {
             tokenId,
+            tokenUri,
             owner: to,
             contract: contractAddress,
           },

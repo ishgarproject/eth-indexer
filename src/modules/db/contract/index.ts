@@ -30,16 +30,16 @@ export async function registerERC721s(contracts: TxResponse[], provider: Alchemy
   );
 }
 
-export async function performERC721Logs(logs: ERC721EventLog[], prisma: PrismaClient) {
+export async function performERC721Logs(logs: ERC721EventLog[], provider: AlchemyProvider, prisma: PrismaClient) {
   console.log(`Performing ${logs.length} ERC721 logs`);
-  return Promise.all(logs.map((log) => performERC721Log(log, prisma)));
+  return Promise.all(logs.map((log) => performERC721Log(log, provider, prisma)));
 }
 
-async function performERC721Log(log: ERC721EventLog, prisma: PrismaClient) {
+async function performERC721Log(log: ERC721EventLog, provider: AlchemyProvider, prisma: PrismaClient) {
   switch (log.name) {
     case 'Transfer':
       console.log('Transfer detected');
-      await performERC721Transfer(log, prisma);
+      await performERC721Transfer(log, provider, prisma);
       break;
     case 'Approval':
       console.log('Approval detected');
