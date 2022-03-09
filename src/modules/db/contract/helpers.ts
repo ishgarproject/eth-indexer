@@ -8,15 +8,46 @@ export async function retrieveERC721(address: string, prisma: PrismaClient) {
   return prisma.contract.findFirst({ where: { address } });
 }
 
-export async function getERC721TokenImageUri(tokenUri: string) {
-  const [, suffix] = tokenUri.split('//');
-  const url = IPFS_BASE_URI + suffix;
-  const metadata: ERC721Metadata = await got.get(url).json();
-  if (!metadata?.image) {
+/**
+ * Dumb way to check if a given tokenUri points to ipfs or not
+ * For simplicity, I assume ipfs uris are prefixed with 'ipfs'
+ */
+function isIpfsUri(str: string) {
+  const target = 'ipfs';
+  return str.startsWith(target);
+}
+
+async function getERC721TokenMetadata(tokenUri: string): Promise<ERC721Metadata> {
+  return await got.get(tokenUri).json();
+}
+
+function getERC721TokenMetadataUriFetchable(tokenUri: string) {
+  if (!isIpfsUri(tokenUri)) {
     return tokenUri;
   }
-  const [, cid] = metadata?.image.split('//');
-  return IPFS_BASE_URI + cid;
+  const [, suffix] = tokenUri.split('//');
+  return IPFS_BASE_URI + suffix;
+}
+
+/**
+ * @param {string} tokenUri
+ * Ugly
+ */
+export async function getERC721TokenImageUri(tokenUri: string) {
+  try {
+    const uri = getERC721TokenMetadataUriFetchable(tokenUri);
+    const metadata = await getERC721TokenMetadata(uri);
+    if (!metadata?.image) {
+      return tokenUri;
+    }
+    if (isIpfsUri(tokenUri)) {
+      const [, cid] = metadata?.image.split('//');
+      return IPFS_BASE_URI + cid;
+    }
+    return metadata.image;
+  } catch {
+    return tokenUri;
+  }
 }
 
 export function getERC721TransferArgs(log: ERC721EventLog) {

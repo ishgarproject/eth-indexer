@@ -1,1 +1,1 @@
-export const VAULT_ADDRESS = '0x58ff414981ea74b0f86094769753686d42b06bff';
+export const VAULT_ADDRESS = '0xd854c4dc64d8231d159ac4f7941a68fcea3267ed';
