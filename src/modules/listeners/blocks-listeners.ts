@@ -6,7 +6,7 @@ import type { TxResponse, ERC721EventLog } from '~/types';
 import ERC721Abi from '~/abis/ERC721.json';
 import { registerERC721s, performERC721Logs } from '~/modules/db/contract';
 
-export async function blockListener(provider: AlchemyProvider, prisma: PrismaClient) {
+export function blockListener(provider: AlchemyProvider, prisma: PrismaClient) {
   provider.on('block', async (blockNumber: number) => {
     console.log(`Scanning block ${blockNumber}`);
     const { contracts, erc721Logs } = await getBlockData(blockNumber, provider);

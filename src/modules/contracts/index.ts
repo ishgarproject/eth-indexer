@@ -48,6 +48,6 @@ export async function getERC721NameAndSymbol(contract: ERC721) {
   return { name, symbol };
 }
 
-export async function getERC721TokenUri(contract: ERC721, tokenId: number) {
+export async function getERC721TokenUri(contract: ERC721, tokenId: string) {
   return await contract.tokenURI(tokenId);
 }

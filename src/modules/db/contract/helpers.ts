@@ -55,7 +55,7 @@ export function getERC721TransferArgs(log: ERC721EventLog) {
   return {
     from: from as string,
     to: to as string,
-    tokenId: BigNumber.from(tokenId as BigNumber).toNumber(),
+    tokenId: BigNumber.from(tokenId as BigNumber).toString(),
   };
 }
 
@@ -64,6 +64,6 @@ export function getERC721ApprovalArgs(log: ERC721EventLog) {
   return {
     owner: owner as string,
     spender: spender as string,
-    tokenId: BigNumber.from(tokenId as BigNumber).toNumber(),
+    tokenId: BigNumber.from(tokenId as BigNumber).toString(),
   };
 }
