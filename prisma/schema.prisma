@@ -25,15 +25,17 @@ model Contract {
 }
 
 model Token {
-  id              Int       @id @default(autoincrement())
-  tokenId         Int
-  owner           String
-  tokenUri        String?
-  imageUri        String?
-  contract        String
-  approvedAddress String?
-  Contract        Contract? @relation(fields: [contractId], references: [id])
-  contractId      Int?
+  id               Int       @id @default(autoincrement())
+  tokenId          String
+  owner            String
+  tokenUri         String?
+  imageUri         String?
+  contract         String
+  approvedAddress  String?
+  depositorAddress String?
+  depositedInVault Boolean   @default(false)
+  Contract         Contract? @relation(fields: [contractId], references: [id])
+  contractId       Int?
 
   @@index([id])
 }
