@@ -17,12 +17,12 @@ export async function performERC721Transfer(log: ERC721EventLog, provider: Alche
 
 async function updateToken(log: ERC721EventLog, provider: AlchemyProvider, prisma: PrismaClient) {
   const { contractAddress } = log;
-  const { to, tokenId } = getERC721TransferArgs(log);
+  const { from, to, tokenId } = getERC721TransferArgs(log);
 
   const token = await prisma.token.findFirst({
     where: {
       tokenId,
-      owner: to,
+      owner: from,
       contract: contractAddress,
     },
   });

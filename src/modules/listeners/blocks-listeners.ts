@@ -26,17 +26,13 @@ async function getBlockData(blockNumber: number, provider: AlchemyProvider) {
 async function getERC721LogsInBlock(block: BlockWithTransactions, provider: AlchemyProvider) {
   const transactions = getNonContractDeploymentsInBlock(block);
   const logsPerTransaction = await Promise.all(
-    transactions.map(({ hash, to }) => getERC721TransactionLogs(hash, to, provider))
+    transactions.map(({ hash }) => getERC721TransactionLogs(hash, provider))
   );
   // remove empty arrays
   return logsPerTransaction.filter((transactionLogs) => transactionLogs.length).flat();
 }
 
-async function getERC721TransactionLogs(
-  transactionHash: string,
-  contractAddress: string,
-  provider: AlchemyProvider
-): Promise<ERC721EventLog[]> {
+async function getERC721TransactionLogs(transactionHash: string, provider: AlchemyProvider): Promise<ERC721EventLog[]> {
   const receipt = await provider.getTransactionReceipt(transactionHash);
   if (!receipt || !receipt.logs) {
     return [];
@@ -47,7 +43,7 @@ async function getERC721TransactionLogs(
       const log = iface.parseLog(rawLog);
       return {
         ...log,
-        contractAddress,
+        contractAddress: rawLog.address,
       };
     } catch (e) {
       return null;
