@@ -35,6 +35,9 @@ function getERC721TokenMetadataUriFetchable(tokenUri: string) {
  */
 export async function getERC721TokenImageUri(tokenUri: string) {
   try {
+    if (!tokenUri) {
+      return tokenUri;
+    }
     const uri = getERC721TokenMetadataUriFetchable(tokenUri);
     const metadata = await getERC721TokenMetadata(uri);
     if (!metadata?.image) {

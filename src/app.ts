@@ -1,8 +1,8 @@
 import { listeners } from '~/modules/listeners';
 
-const start = async () => {
+const start = () => {
   try {
-    await listeners();
+    listeners();
   } catch (err) {
     process.exit(1);
   }
