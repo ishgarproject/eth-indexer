@@ -21,11 +21,11 @@
     "@ethersproject/constants": "^5.5.0",
     "@ethersproject/contracts": "^5.5.0",
     "@ethersproject/providers": "^5.5.3",
-    "@prisma/client": "^3.10.0",
+    "@prisma/client": "^3.11.0",
     "dotenv": "^16.0.0",
     "ethers": "^5.5.4",
     "got": "11.8.3",
-    "prisma": "^3.10.0"
+    "prisma": "^3.11.0"
   },
   "devDependencies": {
     "@typechain/ethers-v5": "^9.0.0",
