@@ -1,14 +1,22 @@
 import type { TransactionResponse } from '@ethersproject/abstract-provider';
 import type { LogDescription } from '@ethersproject/abi';
+import type { Prisma } from '@prisma/client';
 
 export type AlchemyNetwork = 'mainnet' | 'goerli';
 
 export type TxResponse = TransactionResponse & { creates?: string };
 export type ERC721EventLog = LogDescription & { contractAddress: string };
 
+export interface Attribute {
+  trait_type: string;
+  value: string;
+}
+
 export interface ERC721Metadata {
+  name?: string;
+  description?: string;
   image?: string;
-  attributes?: any[];
+  attributes?: Prisma.JsonArray;
 }
 
 export interface Nft {

@@ -15,6 +15,16 @@ enum ContractType {
   ERC1155
 }
 
+enum OrderType {
+  ASK
+  BID
+}
+
+enum OrderStatus {
+  OPEN
+  CLOSE
+}
+
 model Contract {
   id           Int          @id @default(autoincrement())
   address      String       @unique
@@ -25,17 +35,33 @@ model Contract {
 }
 
 model Token {
-  id               Int       @id @default(autoincrement())
-  tokenId          String
-  owner            String
-  tokenUri         String?
-  imageUri         String?
-  contract         String
-  approvedAddress  String?
-  depositorAddress String?
-  depositedInVault Boolean   @default(false)
-  Contract         Contract? @relation(fields: [contractId], references: [id])
-  contractId       Int?
+  id                Int       @id @default(autoincrement())
+  tokenId           String
+  owner             String
+  name              String?
+  description       String?   @db.VarChar(1000)
+  tokenUri          String?
+  imageUri          String?
+  attributes        Json?
+  approvedAddress   String?
+  depositorAddress  String?
+  depositedInVault  Boolean   @default(false)
+  collectionAddress String
+  orders            Order[]
+  Contract          Contract? @relation(fields: [contractId], references: [id])
+  contractId        Int?
+
+  @@index([id])
+}
+
+model Order {
+  id                Int         @id @default(autoincrement())
+  value             Int
+  orderType         OrderType
+  orderStatus       OrderStatus @default(OPEN)
+  collectionAddress String
+  Token             Token?      @relation(fields: [tokenId], references: [id])
+  tokenId           Int? // database id, not erc721 tokenId
 
   @@index([id])
 }

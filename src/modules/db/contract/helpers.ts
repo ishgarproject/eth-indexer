@@ -17,7 +17,7 @@ function isIpfsUri(str: string) {
   return str.startsWith(target);
 }
 
-async function getERC721TokenMetadata(tokenUri: string): Promise<ERC721Metadata> {
+async function fetchERC721TokenMetadata(tokenUri: string): Promise<ERC721Metadata> {
   return await got.get(tokenUri).json();
 }
 
@@ -29,28 +29,27 @@ function getERC721TokenMetadataUriFetchable(tokenUri: string) {
   return IPFS_BASE_URI + suffix;
 }
 
-/**
- * @param {string} tokenUri
- * Ugly
- */
-export async function getERC721TokenImageUri(tokenUri: string) {
+export async function getERC721TokenMetadata(tokenUri: string): Promise<ERC721Metadata> {
   try {
     if (!tokenUri) {
-      return tokenUri;
+      return { image: tokenUri };
     }
     const uri = getERC721TokenMetadataUriFetchable(tokenUri);
-    const metadata = await getERC721TokenMetadata(uri);
-    if (!metadata?.image) {
-      return tokenUri;
-    }
-    if (isIpfsUri(tokenUri)) {
-      const [, cid] = metadata?.image.split('//');
-      return IPFS_BASE_URI + cid;
-    }
-    return metadata.image;
+    const metadata = await fetchERC721TokenMetadata(uri);
+    metadata.image = formatImageUri(tokenUri, metadata?.image);
+    return metadata;
   } catch {
-    return tokenUri;
+    return { image: tokenUri };
   }
+}
+
+function formatImageUri(tokenUri: string, imageUri?: string | null) {
+  if (!imageUri) return tokenUri;
+  if (isIpfsUri(tokenUri)) {
+    const [, cid] = imageUri.split('//');
+    return IPFS_BASE_URI + cid;
+  }
+  return imageUri;
 }
 
 export function getERC721TransferArgs(log: ERC721EventLog) {

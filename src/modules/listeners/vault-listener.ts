@@ -9,7 +9,7 @@ export async function vaultListener(provider: AlchemyProvider, prisma: PrismaCli
     const token = await prisma.token.findFirst({
       where: {
         owner: depositorAddress,
-        contract: erc721Address,
+        collectionAddress: erc721Address,
         tokenId: tokenId.toString(),
       },
     });

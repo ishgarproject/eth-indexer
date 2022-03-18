@@ -9,7 +9,7 @@ export async function performERC721Approval(log: ERC721EventLog, prisma: PrismaC
     where: {
       owner,
       tokenId,
-      contract: contractAddress,
+      collectionAddress: contractAddress,
     },
   });
   if (token === null) {
